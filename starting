@@ -1,0 +1,84 @@
+import pygame
+import sys
+
+
+
+# Initialize Pygame
+pygame.init()
+
+# Set the dimensions of the game window
+window_width = 800
+window_height = 800
+
+# Create the game window
+game_window = pygame.display.set_mode((window_width, window_height))
+
+# Set the title of the window
+pygame.display.set_caption("Choose Your Character")
+
+# Load background images
+# Load background images
+initial_background_image = pygame.image.load('C:/Users/cagat/Desktop/GAMING/Graphics/ground4.png')  # Update this path
+initial_background_image = pygame.transform.scale(initial_background_image, (window_width, window_height))
+man_background_image = pygame.image.load('C:/Users/cagat/Desktop/GAMING/Graphics/ground2.png')  # Update this path
+man_background_image = pygame.transform.scale(man_background_image, (window_width, window_height))
+woman_background_image = pygame.image.load('C:/Users/cagat/Desktop/GAMING/Graphics/ground3.png')  # Update this path
+woman_background_image = pygame.transform.scale(woman_background_image, (window_width, window_height))
+
+
+# Current background
+current_background = initial_background_image
+
+# Define colors
+black = (0, 0, 0)
+white = (255, 255, 255)
+
+# Create font object
+font = pygame.font.Font(None, 36)
+
+# Render text surfaces
+question_text = font.render('Which one do you want to play?', True, black)
+man_option_text = font.render('Man', True, white)
+woman_option_text = font.render('Woman', True, white)
+
+# Define text positions
+question_pos = (window_width // 2 - question_text.get_width() // 2, 50)
+man_option_pos = (window_width // 2 - man_option_text.get_width() // 2, 200)
+woman_option_pos = (window_width // 2 - woman_option_text.get_width() // 2, 250)
+
+# Selection state
+selection_made = False
+
+# Game loop flag
+running = True
+
+# Game loop
+while running:
+    # Event handling
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN and not selection_made:
+            mouse_pos = event.pos  # Get mouse position
+            # Check if mouse is clicked on the options
+            if man_option_text.get_rect(topleft=man_option_pos).collidepoint(mouse_pos):
+                print("Man chosen")
+                current_background = man_background_image
+                selection_made = True
+            elif woman_option_text.get_rect(topleft=woman_option_pos).collidepoint(mouse_pos):
+                print("Woman chosen")
+                current_background = woman_background_image
+                selection_made = True
+
+    # Blit the current background
+    game_window.blit(current_background, (0, 0))
+    
+    # Blit the texts only if selection hasn't been made
+    if not selection_made:
+        game_window.blit(question_text, question_pos)
+        game_window.blit(man_option_text, man_option_pos)
+        game_window.blit(woman_option_text, woman_option_pos)
+
+    # Update the display
+    pygame.display.flip()
